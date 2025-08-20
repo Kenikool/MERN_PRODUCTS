@@ -1,5 +1,3 @@
-// src/controllers/review.controller.js
-
 import Review from "../models/review.model.js";
 import Product from "../models/product.model.js"; // Make sure to import Product
 import AppError from "../utils/appError.js";
