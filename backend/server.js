@@ -35,17 +35,17 @@ app.use("/api/dashboard", dashboardRoute);
 
 // --- ERROR HANDLING ---
 
+app.use((req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
+app.use(globalErrorHandler);
+
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/dist")));
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
   });
 }
-app.use((req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
-});
-app.use(globalErrorHandler);
-
 app.listen(PORT, () => {
   console.log(`Server connected on port: ${PORT}`);
   connectDB();
