@@ -8,6 +8,6 @@ createRoot(document.getElementById("root")).render(
   <ChakraProvider>
     <BrowserRouter>
       <App />
-    </BrowserRouter>
+    </BrowserRouter>  
   </ChakraProvider>
 );
