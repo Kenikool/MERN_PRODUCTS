@@ -300,14 +300,12 @@ export const updateProfile = async (req, res, next) => {
 };
 export const deleteAccount = async (req, res, next) => {
   try {
-    // Get the user ID from the authenticated request
     const userId = req.user._id;
 
     const productsToDelete = await Product.find({ ownerId: userId });
     for (const product of productsToDelete) {
       if (product.image && !product.image.includes("/avatar.png")) {
         try {
-          // Extract the public_id and delete the image from Cloudinary
           const urlParts = product.image.split("/");
           const folderIndex = urlParts.indexOf("products");
           let publicId = null;
@@ -326,10 +324,8 @@ export const deleteAccount = async (req, res, next) => {
       }
     }
 
-    // 2. Delete all products owned by the user from the database
     await Product.deleteMany({ ownerId: userId });
 
-    // Find and delete the user by their ID
     const deletedUser = await User.findByIdAndDelete(userId);
 
     // If no user was found, return a 404 error
@@ -337,9 +333,8 @@ export const deleteAccount = async (req, res, next) => {
       return next(new AppError("User not found", 400));
     }
 
-    // 4. Clear the authentication cookie
     res.cookie("token", "", { maxAge: 0 });
-    // Send a success message
+
     return res.status(200).json({ message: "Account deleted successfully." });
   } catch (error) {
     console.error("Error in deleteAccount controller:", error);
